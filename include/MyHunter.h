@@ -27,6 +27,8 @@
     #define EXIT_FAILURE 84
     #define EVENT_AMOUNT 13
 
+    #define DEFAULT_NODE_NAME "0"
+
 // ENUMS
 
 enum CURRENT_WINDOW {

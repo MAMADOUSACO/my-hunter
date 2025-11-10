@@ -30,8 +30,8 @@ int remove_event(event_t *head, const char *restrict callback_name)
     event_t *temp;
     bool found_event = false;
 
-    while (head->next != NULL) {
-        if (str_cmp(head->next->name, callback_name) == 0)
+    while (head != NULL) {
+        if (str_cmp(head->name, callback_name) == 0)
             found_event = true;
         if (found_event)
             break;
@@ -47,8 +47,9 @@ int remove_event(event_t *head, const char *restrict callback_name)
 
 int execute_event(event_t *head, sfEvent *event)
 {
-    while (head->next != NULL) {
-        if (head->callback(event) == EXIT_FAILURE) {
+    while (head != NULL) {
+        if (str_cmp(head->name, DEFAULT_NODE_NAME) != 0 &&
+            head->callback(event) == EXIT_FAILURE) {
             my_printf("A callback failed : %s\n", head->name);
             return EXIT_FAILURE;
         }
@@ -66,7 +67,7 @@ event_t **initialize_array(void)
     array[EVENT_AMOUNT] = NULL;
     for (int i = 0; i < EVENT_AMOUNT; i++) {
         array[i] = malloc(sizeof(event_t));
-        array[i]->name = "0";
+        array[i]->name = DEFAULT_NODE_NAME;
         array[i]->callback = NULL;
         array[i]->next = NULL;
     }
@@ -95,7 +96,7 @@ static void print_callbacks(event_t *head)
     while (head->next != NULL) {
         my_printf("---- Callback print begin");
         my_printf("Name : %s\n", head->name);
-        my_printf("Address : %s\n", head->callback);
+        my_printf("Address : 0x%d\n", (int)head->callback);
         my_printf("---- Callback print end");
     }
 }

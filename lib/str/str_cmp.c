@@ -9,6 +9,6 @@ int str_cmp(const char *str1, const char *str2)
 {
     int i = 0;
 
-    for (int i; str1[i] != 0 && str1[i] == str2[i]; i++);
+    for (i = 0; str1[i] != 0 && str1[i] == str2[i]; i++);
     return str1[i] - str2[i];
 }
