@@ -19,15 +19,10 @@
     #include <SFML/Audio.h>
     #include <SFML/Graphics.h>
 
-    #include "./EventModule.h"
-
     // MACROS
 
-    #define EXIT_SUCCESS 0
-    #define EXIT_FAILURE 84
-    #define EVENT_AMOUNT 13
-
-    #define DEFAULT_NODE_NAME "0"
+    #define EXIT_SUCC 0
+    #define EXIT_FAIL 84
 
 // ENUMS
 
