@@ -30,10 +30,11 @@ typedef struct event {
 // DEPENDENCIES
 int my_printf(const char *format, ...);
 int str_cmp(const char *str1, const char *str2);
+void *safe_malloc(size_t bytes);
 
 // EVENT MODULE FUNCTIONS
-event_t **initialize_array(void);
-int free_array(event_t **array);
+event_t **initialize_event_module(void);
+int free_event_module(event_t **array);
 int execute_event_callbacks(event_t *head, sfEvent *event);
 int add_event(event_t *head, int (*callback)(sfEvent *event), char *cb_name);
 int remove_event(event_t *head, const char *restrict callback_name);

@@ -7,13 +7,117 @@
 
 #include "./../../../include/SpriteModule.h"
 
-sprite_t *create_sprite(sprite_ini_t *data)
+/*
+Because we use a method of "expected id",
+this implies sorting the linked list by ids in ascendant order.
+(Example : Avoid duplicate id "2" in list 0,1,3,2)
+*/
+static int get_next_id(sprite_t *sprites)
 {
-    sprite_t *sprite = malloc(sizeof(sprite));
+    int expected_id = -1;
+
+    while (sprites != NULL) {
+        if (sprites->id != expected_id)
+            return expected_id;
+        expected_id++;
+        sprites = sprites->next;
+    }
+    return expected_id;
+}
+
+static sprite_creation_t *create_sprite_elements(sprite_ini_t *ini_data)
+{
+    sprite_creation_t *data = safe_malloc(sizeof(sprite_creation_t));
+    sprite_t *spr = safe_malloc(sizeof(sprite_t));
+    sfTexture *sf_txt = sfTexture_createFromFile(ini_data->texture_path, NULL);
+    sfSprite *sf_spr = sfSprite_create();
+
+    if (data == NULL || spr == NULL || sf_txt == NULL || sf_spr == NULL) {
+        if (data != NULL)
+            free(data);
+        if (spr != NULL)
+            free(spr);
+        if (sf_txt != NULL)
+            free(sf_txt);
+        if (sf_spr != NULL)
+            free(sf_spr);
+        return NULL;
+    }
+    data->sprite = spr;
+    data->sf_texture = sf_txt;
+    data->sf_sprite = sf_spr;
+    return data;
+}
+
+static void place_sprite(sprite_t *sprites, sprite_t *sprite)
+{
+    while (sprites->id < (sprite->id - 1)) {
+        sprites = sprites->next;
+    }
+    sprite->next = sprites->next;
+    sprites->next = sprite;
+}
+
+// NEXT STEP : add the actual texture + sprite
+sprite_t *create_sprite(sprite_t *sprites, sprite_ini_t *data, char *name)
+{
+    sprite_creation_t *creation_data = create_sprite_elements(data);
+    sprite_t *sprite;
+
+    if (creation_data == NULL)
+        return NULL;
+    sprite = creation_data->sprite;
+    sprite->aspect_ratio = data->aspect_ratio;
+    sprite->id = get_next_id(sprites);
+    sprite->name = name;
+    sprite->texture_path = data->texture_path;
+    sprite->sf_texture = creation_data->sf_texture;
+    sprite->sf_sprite = creation_data->sf_sprite;
+    // IL MANQUE LES REAJUSTEMENTS DCP IL FAUDRA UNE AUTRE FONCTION POUR CA
+    place_sprite(sprites, sprite);
+    free(creation_data);
     return sprite;
 }
 
-sprite_t *destroy_sprite(sprite_ini_t *data)
+int destroy_sprite(sprite_t *sprites, int id)
 {
+    sprite_t *temp;
 
+    if (id == DEFAULT_ID_SPT)
+        return EXIT_FAIL_SPT;
+    while (sprites->next->id != id && sprites->next != NULL) {
+        sprites = sprites->next;
+    }
+    if (sprites->next == NULL)
+        return EXIT_FAIL_SPT;
+    temp = sprites->next;
+    sprites->next = sprites->next->next;
+    sfTexture_destroy(temp->sf_texture);
+    sfSprite_destroy(temp->sf_sprite);
+    free(temp);
+    return EXIT_SUCC_SPT;
+}
+
+sprite_t *initialize_sprite_module(void)
+{
+    sprite_t *sprite = safe_malloc(sizeof(sprite_t));
+
+    sprite->id = DEFAULT_ID_SPT;
+    sprite->next = NULL;
+    return sprite;
+}
+
+void free_sprite_module(sprite_t *sprites)
+{
+    sprite_t *temp = NULL;
+
+    while (sprites != NULL) {
+        temp = sprites;
+        if (sprites->id != DEFAULT_ID_SPT) {
+            sfTexture_destroy(temp->sf_texture);
+            sfSprite_destroy(temp->sf_sprite);
+        }
+        sprites = sprites->next;
+        free(temp);
+    }
 }

@@ -24,7 +24,7 @@
     #define EXIT_SUCC 0
     #define EXIT_FAIL 84
 
-// ENUMS
+// ENUM
 
 enum CURRENT_WINDOW {
     MENU = 1,

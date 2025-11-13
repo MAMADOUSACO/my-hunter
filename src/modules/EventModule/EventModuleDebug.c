@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** EventModule
 ** File description:
-** Module to debug event processing.
+** Module to facilitate event processing in CSFML.
 */
 
 #include "./../../../include/EventModule.h"

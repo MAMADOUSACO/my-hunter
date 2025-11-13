@@ -2,14 +2,14 @@
 ** EPITECH PROJECT, 2025
 ** EventModule
 ** File description:
-** Module to manage event processing.
+** Module to facilitate event processing in CSFML.
 */
 
 #include "./../../../include/EventModule.h"
 
 int add_event(event_t *head, int (*callback)(sfEvent *event), char *cb_name)
 {
-    event_t *new_event = malloc(sizeof(event_t));
+    event_t *new_event = safe_malloc(sizeof(event_t));
 
     if (new_event == NULL)
         return EXIT_FAIL_EVT;
@@ -58,9 +58,9 @@ int execute_event_callbacks(event_t *head, sfEvent *event)
     return EXIT_SUCC_EVT;
 }
 
-event_t **initialize_array(void)
+event_t **initialize_event_module(void)
 {
-    event_t **array = malloc(sizeof(event_t*) * (EVENT_AMOUNT + 1));
+    event_t **array = safe_malloc(sizeof(event_t*) * (EVENT_AMOUNT + 1));
 
     if (array == NULL)
         return NULL;
@@ -74,7 +74,7 @@ event_t **initialize_array(void)
     return array;
 }
 
-int free_array(event_t **array)
+int free_event_module(event_t **array)
 {
     event_t *temp;
     event_t *head;
