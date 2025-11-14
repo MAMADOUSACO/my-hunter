@@ -49,7 +49,7 @@ static sprite_creation_t *create_sprite_elements(sprite_ini_t *ini_data)
     return data;
 }
 
-static void place_sprite(sprite_t *sprites, sprite_t *sprite)
+static void place_sprite_in_array(sprite_t *sprites, sprite_t *sprite)
 {
     while (sprites->id < (sprite->id - 1)) {
         sprites = sprites->next;
@@ -58,23 +58,35 @@ static void place_sprite(sprite_t *sprites, sprite_t *sprite)
     sprites->next = sprite;
 }
 
-// NEXT STEP : add the actual texture + sprite
-sprite_t *create_sprite(sprite_t *sprites, sprite_ini_t *data, char *name)
+static void initialize_sprite_properties(sprite_t *sprite,
+    sprite_ini_t *ini_data)
 {
-    sprite_creation_t *creation_data = create_sprite_elements(data);
+    sfSprite_setPosition(sprite->sf_sprite, ini_data->position_scale);
+    sfSprite_setRotation(sprite->sf_sprite, ini_data->rotation);
+    sfSprite_setScale(sprite->sf_sprite, ini_data->size_scale);
+    sfSprite_setColor(sprite->sf_sprite, *ini_data->color);
+    sfSprite_setTexture(sprite->sf_sprite, sprite->sf_texture, sfTrue);
+    // AJouter une propriété par rapport a la taille du rect ? nécessaire jpense
+}
+
+sprite_t *create_sprite(sprite_t *sprites, sprite_ini_t *ini_data, char *name)
+{
+    sprite_creation_t *creation_data = create_sprite_elements(ini_data);
     sprite_t *sprite;
 
     if (creation_data == NULL)
         return NULL;
     sprite = creation_data->sprite;
-    sprite->aspect_ratio = data->aspect_ratio;
+    sprite->aspect_ratio = ini_data->aspect_ratio;
     sprite->id = get_next_id(sprites);
     sprite->name = name;
-    sprite->texture_path = data->texture_path;
+    sprite->texture_path = ini_data->texture_path;
     sprite->sf_texture = creation_data->sf_texture;
     sprite->sf_sprite = creation_data->sf_sprite;
-    // IL MANQUE LES REAJUSTEMENTS DCP IL FAUDRA UNE AUTRE FONCTION POUR CA
-    place_sprite(sprites, sprite);
+    sprite->min_screen_scale = ini_data->min_screen_scale;
+    sprite->max_screen_scale = ini_data->max_screen_scale;
+    initialize_sprite_properties(sprite, ini_data);
+    place_sprite_in_array(sprites, sprite);
     free(creation_data);
     return sprite;
 }

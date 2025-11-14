@@ -23,18 +23,19 @@ static sfColor *initialize_default_color(void)
 sprite_ini_t *initialize_sprite_data(void)
 {
     sprite_ini_t *data = safe_malloc(sizeof(sprite_ini_t));
-    sfVector2u offset = {0, 0};
     sfVector2f scale = {0.5, 0.5};
+    sfVector2f min_scale = {0, 0};
+    sfVector2f max_scale = {10, 10};
 
     if (data == NULL)
         return NULL;
     data->aspect_ratio = 1;
     data->color = initialize_default_color();
-    data->position_offset = offset;
     data->position_scale = scale;
-    data->rotation = 0;
-    data->size_offset = offset;
+    data->min_screen_scale = min_scale;
+    data->max_screen_scale = max_scale;
     data->size_scale = scale;
+    data->rotation = 0;
     data->texture_path = "";
     if (data->color == NULL) {
         free(data);

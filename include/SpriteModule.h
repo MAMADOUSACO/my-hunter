@@ -23,12 +23,12 @@
 
 typedef struct sprite_ini {
     char *texture_path;
+
     float aspect_ratio;
+    sfVector2f min_screen_scale;
+    sfVector2f max_screen_scale;
 
-    sfVector2u position_offset;
     sfVector2f position_scale;
-
-    sfVector2u size_offset;
     sfVector2f size_scale;
 
     float rotation;
@@ -45,6 +45,11 @@ typedef struct sprite {
     sfTexture *sf_texture;
 
     float aspect_ratio;
+    sfVector2f window_scale_theoretical;
+    sfVector2f window_scale_real;
+    sfVector2f min_screen_scale;
+    sfVector2f max_screen_scale;
+
     struct sprite *next;
 } sprite_t;
 
@@ -72,6 +77,11 @@ void free_sprite_data(sprite_ini_t *data);
 // GET FUNCTIONS
 sprite_t *get_sprite_by_id(sprite_t *sprites, int id);
 sprite_t *get_all_sprites_by_name(sprite_t *sprites, char *name);
+
+// SET FUNCTIONS
+void sfSprite_setScaleWindowBased(sprite_t *sprite,
+    sfRenderWindow *window, sfVector2f scale);
+void sfSprite_applyAspectRatio(sprite_t *sprite);
 
 // DEBUG FUNCTIONS
 void print_sprite_data(sprite_t *sprite);
