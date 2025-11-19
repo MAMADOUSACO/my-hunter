@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** SpriteDrawModule
 ** File description:
-** Dynamic array for efficient sprite rendering order management.
+** Sprite Draw Module Header.
 */
 
 #ifndef SPRITE_DRAW_MODULE_H

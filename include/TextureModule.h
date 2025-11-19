@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2025
-** SpriteModule
+** TextureModule
 ** File description:
-** Wrapper around CSFML texture library for caching.
+** Texture Module Header.
 */
 
 #ifndef TEXTURE_MODULE_H
