@@ -13,6 +13,7 @@
 
     #include <SFML/System/Vector2.h>
     #include <SFML/Graphics.h>
+    #include "./TextureModule.h"
 
     #define EXIT_SUCC_SPT 0
     #define EXIT_FAIL_SPT 84
@@ -23,9 +24,6 @@
 
 typedef struct sprite_ini {
     char *texture_path;
-
-    bool is_drawn;
-    int draw_level;
 
     float aspect_ratio;
     sfVector2f min_screen_scale;
@@ -42,9 +40,6 @@ typedef struct sprite {
     int id;
     char *name;
     char *texture_path;
-
-    bool is_drawn;
-    int draw_level;
 
     sfSprite *sf_sprite;
     sfTexture *sf_texture;
@@ -68,9 +63,11 @@ typedef struct sprite_creation {
 int my_printf(const char *format, ...);
 int str_cmp(const char *str1, const char *str2);
 void *safe_malloc(size_t bytes);
+sfTexture *get_texture(texture_t *textures, const char *texture_path);
 
 // MAIN FUNCTIONS
-sprite_t *create_sprite(sprite_t *sprites, sprite_ini_t *data, char *name);
+sprite_t *create_sprite(sprite_t *sprites, sprite_ini_t *data,
+    char *name, texture_t *textures);
 int destroy_sprite(sprite_t *sprites, int id);
 sprite_t *initialize_sprite_module(void);
 void free_sprite_module(sprite_t *sprites);

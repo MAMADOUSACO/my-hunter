@@ -25,11 +25,11 @@ static int get_next_id(sprite_t *sprites)
     return expected_id;
 }
 
-static sprite_creation_t *create_sprite_elements(sprite_ini_t *ini_data)
+static sprite_creation_t *create_sprite_elements(sprite_ini_t *ini_data, texture_t *textures)
 {
     sprite_creation_t *data = safe_malloc(sizeof(sprite_creation_t));
     sprite_t *spr = safe_malloc(sizeof(sprite_t));
-    sfTexture *sf_txt = sfTexture_createFromFile(ini_data->texture_path, NULL);
+    sfTexture *sf_txt = get_texture(textures, ini_data->texture_path);
     sfSprite *sf_spr = sfSprite_create();
 
     if (data == NULL || spr == NULL || sf_txt == NULL || sf_spr == NULL) {
@@ -69,9 +69,10 @@ static void initialize_sprite_properties(sprite_t *sprite,
     // AJouter une propriété par rapport a la taille du rect ? nécessaire jpense
 }
 
-sprite_t *create_sprite(sprite_t *sprites, sprite_ini_t *ini_data, char *name)
+sprite_t *create_sprite(sprite_t *sprites, sprite_ini_t *ini_data,
+    char *name, texture_t *textures)
 {
-    sprite_creation_t *creation_data = create_sprite_elements(ini_data);
+    sprite_creation_t *creation_data = create_sprite_elements(ini_data, textures);
     sprite_t *sprite;
 
     if (creation_data == NULL)
@@ -104,7 +105,6 @@ int destroy_sprite(sprite_t *sprites, int id)
         return EXIT_FAIL_SPT;
     temp = sprites->next;
     sprites->next = sprites->next->next;
-    sfTexture_destroy(temp->sf_texture);
     sfSprite_destroy(temp->sf_sprite);
     free(temp);
     return EXIT_SUCC_SPT;
@@ -126,7 +126,6 @@ void free_sprite_module(sprite_t *sprites)
     while (sprites != NULL) {
         temp = sprites;
         if (sprites->id != DEFAULT_ID_SPT) {
-            sfTexture_destroy(temp->sf_texture);
             sfSprite_destroy(temp->sf_sprite);
         }
         sprites = sprites->next;
