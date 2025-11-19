@@ -7,23 +7,6 @@
 
 #include "./../../../include/SpriteModule.h"
 
-int ntm = 0;
-
-void sfSprite_applyAspectRatio(sprite_t *sprite, sfRenderWindow *window)
-{
-    sfVector2u window_size = sfRenderWindow_getSize(window);
-    sfVector2f scale = sfSprite_getScale(sprite->sf_sprite);
-    sfVector2u text = sfTexture_getSize(sprite->sf_texture);
-
-    scale.x = scale.y * sprite->aspect_ratio;
-    sfSprite_setScale(sprite->sf_sprite, scale);
-    ntm++;
-    if (ntm % 1000 != 0)
-        return;
-    my_printf("ar is %d, scale is %d %d\n", (int)sprite->aspect_ratio, (int)(scale.x*1000), (int)(scale.y*1000));
-    my_printf("texture size is %d %d\n", text.x, text.y);
-}
-
 void sfSprite_setScaleWindowBased(sprite_t *sprite,
     sfRenderWindow *window, sfVector2f scale)
 {

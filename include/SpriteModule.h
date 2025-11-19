@@ -24,6 +24,9 @@
 typedef struct sprite_ini {
     char *texture_path;
 
+    bool is_drawn;
+    int draw_level;
+
     float aspect_ratio;
     sfVector2f min_screen_scale;
     sfVector2f max_screen_scale;
@@ -39,7 +42,9 @@ typedef struct sprite {
     int id;
     char *name;
     char *texture_path;
+
     bool is_drawn;
+    int draw_level;
 
     sfSprite *sf_sprite;
     sfTexture *sf_texture;

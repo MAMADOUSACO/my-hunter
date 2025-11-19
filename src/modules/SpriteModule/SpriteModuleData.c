@@ -32,8 +32,6 @@ sprite_ini_t *initialize_sprite_data(void)
     data->aspect_ratio = 1;
     data->color = initialize_default_color();
     data->position_scale = scale;
-    data->min_screen_scale = min_scale;
-    data->max_screen_scale = max_scale;
     data->size_scale = scale;
     data->rotation = 0;
     data->texture_path = "";
